@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libzip-dev \
-    mysql-client && \
+    default-mysql-client && \
     docker-php-ext-configure gd && \
     docker-php-ext-install pdo pdo_mysql gd zip opcache
 
