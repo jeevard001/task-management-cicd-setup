@@ -12,23 +12,26 @@ RUN apt-get update && apt-get install -y \
     docker-php-ext-install pdo pdo_mysql gd zip opcache
 
 # Install Composer
-#COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY --from=public.ecr.aws/docker/library/composer:latest /usr/bin/composer /usr/bin/composer
+
 # Set working directory
 WORKDIR /var/www
 
 # Copy only composer files first
 COPY composer.json composer.lock ./
 
+# Install PHP dependencies (without scripts)
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+# Now copy the full application
+COPY . .
+
 # Dummy .env and env var
 COPY .env.example .env
 ENV APP_ENV=production
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
-
-# Now copy the full application
-COPY . .
+# Run composer scripts after all files are in place
+RUN composer run-script post-autoload-dump
 
 # Permissions and entrypoint
 RUN chown -R www-data:www-data storage bootstrap/cache && \
