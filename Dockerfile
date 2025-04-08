@@ -12,8 +12,8 @@ RUN apt-get update && apt-get install -y \
     docker-php-ext-install pdo pdo_mysql gd zip opcache
 
 # Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
+#COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=public.ecr.aws/docker/library/composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
