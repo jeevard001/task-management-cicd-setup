@@ -25,10 +25,10 @@ phases:
   post_build:
     commands:
       - docker push $ECR_URI/$APP_NAME:latest
-      - printf '[{"name":"php-fpm","imageUri":"%s"},{"name":"nginx","imageUri":"nginx:alpine"}]' \
-          $ECR_URI/$APP_NAME:latest > imagedefinitions.json
+      - printf '[{"name":"php-fpm","imageUri":"%s"},{"name":"nginx","imageUri":"nginx:alpine"}]' "$ECR_URI/$APP_NAME:latest" > ./imagedefinitions.json
 
 artifacts:
   files:
     - imagedefinitions.json
+  base-directory: .  # Ensures it looks in the root
   discard-paths: yes
