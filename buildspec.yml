@@ -1,0 +1,34 @@
+version: 0.2
+env:
+  variables:
+    ECR_URI: "897729109441.dkr.ecr.us-east-1.amazonaws.com"
+    APP_NAME: "laravel-app-php-fpm"
+
+phases:
+  install:
+    commands:
+      - mkdir -p /var/www
+      - cp -r . /var/www
+      - cd /var/www
+      - chmod +x entrypoint.sh
+
+  pre_build:
+    commands:
+      - aws ecr get-login-password | docker login --username AWS --password-stdin $ECR_URI
+      - docker pull $ECR_URI/$APP_NAME:latest || true
+
+  build:
+    commands:
+      - docker build -t $APP_NAME .
+      - docker tag $APP_NAME:latest $ECR_URI/$APP_NAME:latest
+
+  post_build:
+    commands:
+      - docker push $ECR_URI/$APP_NAME:latest
+      - printf '[{"name":"php-fpm","imageUri":"%s"},{"name":"nginx","imageUri":"nginx:alpine"}]' \
+          $ECR_URI/$APP_NAME:latest > imagedefinitions.json
+
+artifacts:
+  files:
+    - imagedefinitions.json
+  discard-paths: yes

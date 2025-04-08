@@ -11,9 +11,9 @@ php artisan config:clear
 php artisan cache:clear
 
 # Generate key if missing
-if [ -z "$APP_KEY" ]; then
-  php artisan key:generate
-fi
+#if [ -z "$APP_KEY" ]; then
+#  php artisan key:generate
+#fi
 
 # Check for pending migrations
 if php artisan migrate:status | grep -q 'Pending'; then
