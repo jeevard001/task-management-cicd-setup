@@ -2,7 +2,7 @@ version: 0.2
 env:
   variables:
     ECR_URI: "897729109441.dkr.ecr.us-east-1.amazonaws.com"
-    APP_NAME: "laravel-app-php-fpm"
+    APP_NAME: "task-management-php-fpm"
 
 phases:
   install:
