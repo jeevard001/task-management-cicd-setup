@@ -16,9 +16,7 @@ php artisan cache:clear
 #fi
 
 # Check for pending migrations
-if php artisan migrate:status | grep -q 'Pending'; then
   php artisan migrate --force
-fi
 
 # Cache optimized config (after migrations)
 php artisan config:cache
